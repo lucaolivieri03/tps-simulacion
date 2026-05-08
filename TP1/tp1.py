@@ -24,29 +24,136 @@ def main():
     n = args.tiradas
     e = args.elegido
 
-    listado_resultados = []
-
     print(f"Iniciando {c} corridas de {n} tiradas cada una. Analizando el número: {e}")
-    
-    ''' for corrida in range(c):
-        listado_corrida={"frec_rel": [], "desvio": [], "promedio": [], "varianza": []} 
-        salio_numero = 0
-        acum = 0
-        print(f"Corrida {corrida + 1}:")
-        for i in range(n):
-            resultado = random.randint(0, 36)  
-            acum += resultado
-            tirada = i + 1
-            listado_corrida["promedio"].append(acum/tirada)
-            print(f"  Tirada {tirada}: Resultado = {resultado}")
-            if resultado == e:
-                print("¡Número elegido salió!")
-                salio_numero += 1
-            listado_corrida["frec_rel"].append(salio_numero/tirada) 
-    '''
-    
-    resultados = random.randint(0, 36, size=(c, n))
-    print(resultados)
-    
+
+    # === VALORES ESPERADOS (CONSTANTES TEÓRICAS) ===
+    frecuenciaEsperada = 1 / 37
+    valorPromedioEsperado = 18.0 # (0 + 36) / 2
+    valorVarianzaEsperada = 114.0 # (37**2 - 1) / 12
+    desvioEsperado = np.sqrt(valorVarianzaEsperada)
+        
+    corridas = np.random.randint(0, 37, size=(c, n))  #Hasta 37 porque lo expcluye
+    print(corridas)
+    tiradas_acum = np.arange(1, n + 1) 
+
+    # Frecuencia relativa
+
+    listaFrecuenciasRelativaPorTirada = np.cumsum(corridas == e, axis=1) / tiradas_acum
+    print(listaFrecuenciasRelativaPorTirada)
+
+    # Promedio
+
+    listaPromediosPorTirada = np.cumsum(corridas, axis=1) / tiradas_acum
+    print(listaPromediosPorTirada)
+
+    # Varianza
+
+    # 1. Promedios acumulados por corrida (fila)
+    promedios_acum = np.cumsum(corridas, axis=1) / tiradas_acum
+
+    # 2. Promedios de los cuadrados acumulados por corrida (fila)
+    promedios_cuad_acum = np.cumsum(corridas**2, axis=1) / tiradas_acum
+
+    # 3. Varianza acumulada (Fórmula: E[X²] - (E[X])²)
+    listaVarianzasPorTirada = promedios_cuad_acum - (promedios_acum**2)
+
+    print(listaVarianzasPorTirada)
+
+    listaDesvioEstandarPorTirada = np.sqrt(listaVarianzasPorTirada)
+    print(listaDesvioEstandarPorTirada)
+
+    ## Graficar resultados
+
+    plt.figure(figsize=(14, 10))
+
+    plt.subplot(2, 2, 1)
+    plt.plot(tiradas_acum, listaFrecuenciasRelativaPorTirada[0], alpha=1)
+    plt.axhline(y=frecuenciaEsperada, color='r', linestyle='--', label='Frecuencia Esperada', alpha=0.7)
+    plt.title('Frecuencia Relativa del Número Elegido')
+    plt.xlabel('Número de Tiradas')
+    plt.ylabel('Frecuencia Relativa')
+    plt.legend()
+
+    plt.subplot(2, 2, 2)
+    plt.plot(tiradas_acum, listaPromediosPorTirada[0], alpha=1)
+    plt.axhline(y=valorPromedioEsperado, color='r', linestyle='--', label='Promedio Esperado',alpha=0.7)
+    plt.title('Valor Promedio de las Tiradas')
+    plt.xlabel('Número de Tiradas')
+    plt.ylabel('Valor Promedio')
+    plt.ylabel('Promedio')
+    plt.legend()
+
+    plt.subplot(2, 2, 3)
+    plt.plot(tiradas_acum, listaVarianzasPorTirada[0], alpha=1)
+    plt.axhline(y=valorVarianzaEsperada, color='r', linestyle='--', label='Varianza Esperada', alpha=0.7)
+    plt.title('Valor de la Varianza de las Tiradas')
+    plt.xlabel('Número de Tiradas')
+    plt.ylabel('Valor de la Varianza')
+    plt.legend()
+
+    plt.subplot(2, 2, 4)
+    plt.plot(tiradas_acum, listaDesvioEstandarPorTirada[0], alpha=1)
+    plt.axhline(y=desvioEsperado, color='r', linestyle='--', label='Desvío Esperado', alpha=0.7)
+    plt.title('Valor del Desvío Estándar de las Tiradas')
+    plt.xlabel('Número de Tiradas')
+    plt.ylabel('Valor del Desvío Estándar')
+    plt.legend()
+
+    # Ajustar diseño y mostrar gráficos
+    plt.tight_layout()
+
+    # Guardar la figura en disco
+    plt.savefig('graficas.png')
+
+    # ------------------MULTIPLES CORRIDAS----------------------------------
+
+    plt.figure(figsize=(14, 10))
+
+    plt.subplot(2, 2, 1)
+    for i in range(c):
+        plt.plot(tiradas_acum, listaFrecuenciasRelativaPorTirada[i], alpha=0.8)
+    plt.axhline(y=frecuenciaEsperada, color='r', linestyle='--', label='Frecuencia Esperada', alpha=0.7)
+    plt.title('Frecuencia Relativa del Número Elegido')
+    plt.xlabel('Número de Tiradas')
+    plt.ylabel('Frecuencia Relativa')
+    plt.legend()
+
+    plt.subplot(2, 2, 2)
+    for i in range(c):
+        plt.plot(tiradas_acum, listaPromediosPorTirada[i], alpha=0.8)
+    plt.axhline(y=valorPromedioEsperado, color='r', linestyle='--', label='Promedio Esperado',alpha=0.7)
+    plt.title('Valor Promedio de las Tiradas')
+    plt.xlabel('Número de Tiradas')
+    plt.ylabel('Valor Promedio')
+    plt.ylabel('Frecuencia Relativa')
+    plt.legend()
+
+    plt.subplot(2, 2, 3)
+    for i in range(c):
+        plt.plot(tiradas_acum, listaVarianzasPorTirada[i], alpha=0.8)
+    plt.axhline(y=valorVarianzaEsperada, color='r', linestyle='--', label='Varianza Esperada', alpha=0.7)
+    plt.title('Valor de la Varianza de las Tiradas')
+    plt.xlabel('Número de Tiradas')
+    plt.ylabel('Valor de la Varianza')
+    plt.legend()
+
+    plt.subplot(2, 2, 4)
+    for i in range(c):
+        plt.plot(tiradas_acum, listaDesvioEstandarPorTirada[i], alpha=0.8)
+    plt.axhline(y=desvioEsperado, color='r', linestyle='--', label='Desvío Esperado', alpha=0.7)
+    plt.title('Valor del Desvío Estándar de las Tiradas')
+    plt.xlabel('Número de Tiradas')
+    plt.ylabel('Valor del Desvío Estándar')
+    plt.legend()
+
+    # Ajustar diseño y mostrar gráficos
+    plt.tight_layout()
+
+    # Guardar la figura en disco
+    plt.savefig('graficasCorridas.png')
+
+    # Mostrar gráficos
+    plt.show()
+
 if __name__ == "__main__":
     main()
