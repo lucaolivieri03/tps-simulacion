@@ -11,10 +11,8 @@ import matplotlib.pyplot as plt
 # graficar con matplotlib el comportamiento de cada una de las métricas anteriores con respecto a n
 # calcular datos estadisticos con numpy y comparar con los resultados obtenidos en la simulación
 def main():
-    # Configuración del manejador de argumentos
     parser = argparse.ArgumentParser(description='Simulación de Ruleta UTN')
     
-    # -c para corridas, -n para tiradas, -e para número elegido
     parser.add_argument('-c', '--corridas', type=int, required=True, help='Cantidad de corridas (series de tiradas)')
     parser.add_argument('-n', '--tiradas', type=int, required=True, help='Cantidad de tiradas por cada corrida')
     parser.add_argument('-e', '--elegido', type=int, required=True, help='Número elegido para analizar (0-36)')
@@ -30,21 +28,25 @@ def main():
 
     print(f"Iniciando {c} corridas de {n} tiradas cada una. Analizando el número: {e}")
     
-    for corrida in range(c):
-        listado_corrida={"frec_rel": [], "desvio": [], "promedio": [], "varianza": []} # Crear una lista para cada corrida
+    ''' for corrida in range(c):
+        listado_corrida={"frec_rel": [], "desvio": [], "promedio": [], "varianza": []} 
         salio_numero = 0
+        acum = 0
         print(f"Corrida {corrida + 1}:")
-        for tirada in range(n):
-            resultado = random.randint(0, 36)  # Simulación de una tirada de ruleta
-            listado_corrida["promedio"].append(resultado/(n+1)) # Guardar el resultado de la tirada
-            listado_corrida
-            print(f"  Tirada {tirada + 1}: Resultado = {resultado}")
+        for i in range(n):
+            resultado = random.randint(0, 36)  
+            acum += resultado
+            tirada = i + 1
+            listado_corrida["promedio"].append(acum/tirada)
+            print(f"  Tirada {tirada}: Resultado = {resultado}")
             if resultado == e:
                 print("¡Número elegido salió!")
                 salio_numero += 1
-            listado_corrida["frec_rel"].append()
+            listado_corrida["frec_rel"].append(salio_numero/tirada) 
+    '''
     
-
-
+    resultados = random.randint(0, 36, size=(c, n))
+    print(resultados)
+    
 if __name__ == "__main__":
     main()
