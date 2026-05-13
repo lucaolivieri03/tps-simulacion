@@ -8,7 +8,6 @@ class Apuesta:
     def __init__(self, tipo, valor):
         self.tipo = tipo
         self.valor = valor
-        self.ganancia = 0
 
     def validar_ganancia(self, numero):
         if self.tipo == 'color':
@@ -69,6 +68,70 @@ class Apuesta:
             return True
         return False
 
+def estrategia_martingala(corridas, tiradas, capital_inicial):
+    resultados = []
+    for _ in range(corridas):
+        resultado_corrida = []
+        capital = capital_inicial
+        apuesta = 1
+        for _ in range(tiradas):
+            jugada = Apuesta('paridad', 'par')  # Suponemos que siempre apostamos al par
+            numero_ganador = random.randint(0, 36)
+            if jugada.validar_ganancia(numero_ganador):
+                capital += apuesta
+            else:
+                capital -= apuesta
+                apuesta *= 2  # Duplicamos la apuesta después de perder
+                if capital_inicial != -1 and capital < apuesta:
+                    break
+            resultado_corrida.append(capital)
+        resultados.append(resultado_corrida)
+    return resultados
+
+def estrategia_dalembert(corridas, tiradas, capital_inicial):
+    resultados = []
+    for _ in range(corridas):
+        capital = capital_inicial
+        apuesta = 1
+        for _ in range(tiradas):
+            resultado_corrida = []
+            jugada = Apuesta('paridad', 'par')  # Suponemos que siempre apostamos al par
+            numero_ganador = random.randint(0, 36)
+            if jugada.validar_ganancia(numero_ganador):
+                capital += apuesta
+                apuesta = max(1, apuesta - 1)  # Reducimos la apuesta después de ganar, pero no menos de 1
+            else:
+                capital -= apuesta
+                apuesta += 1  # Aumentamos la apuesta después de perder
+                if capital_inicial != -1 and capital < apuesta:
+                    break
+            resultado_corrida.append(capital)
+        resultados.append(resultado_corrida)
+    return resultados
+
+def estrategia_fibonacci(corridas, tiradas, capital_inicial):
+    resultados = []
+    for _ in range(corridas):
+        capital = capital_inicial
+        secuencia_fibonacci = [1, 1]  # Comenzamos con los dos primeros números de Fibonacci
+        apuesta_index = 0
+        for _ in range(tiradas):
+            resultado_corrida = []
+            jugada = Apuesta('paridad', 'par')  # Suponemos que siempre apostamos al par
+            numero_ganador = random.randint(0, 36)
+            if jugada.validar_ganancia(numero_ganador):
+                capital += secuencia_fibonacci[apuesta_index]
+                apuesta_index = max(0, apuesta_index - 2)  # Retrocedemos dos posiciones en la secuencia después de ganar
+            else:
+                capital -= secuencia_fibonacci[apuesta_index]
+                apuesta_index += 1  # Avanzamos una posición en la secuencia después de perder
+                if apuesta_index >= len(secuencia_fibonacci):  # Si llegamos al final de la secuencia, agregamos el siguiente número
+                    secuencia_fibonacci.append(secuencia_fibonacci[-1] + secuencia_fibonacci[-2])
+                if capital_inicial != -1 and capital < secuencia_fibonacci[apuesta_index]:
+                    break
+            resultado_corrida.append(capital)
+        resultados.append(resultado_corrida)
+    return resultados
 
 def main():
     parser = argparse.ArgumentParser(description='Simulación de Ruleta UTN')
@@ -85,11 +148,22 @@ def main():
     s = args.estrategia
     a = args.capital
 
+    if a == 'i':
+        capital = -1  # Capital infinito
+    else:
+        capital = 100  # Capital inicial para estrategias con capital finito
+
     print(f"Iniciando {c} corridas de {n} tiradas cada una. Analizando la estrategia: {s} con capital: {a}")
 
-    corridas = np.random.randint(0, 37, size=(c, n))  # 37 excluido, rango 0-36
-    print(corridas)
-
+    if s == 'm':
+        resultados = estrategia_martingala(c, n, capital)
+    elif s == 'd':
+        resultados = estrategia_dalembert(c, n, capital)
+    elif s == 'f':
+        resultados = estrategia_fibonacci(c, n, capital)
+    else:
+        print("Estrategia no reconocida. Por favor, elija entre 'm', 'd', 'f' o 'o'.")
+        return
 
 if __name__ == '__main__':
     main()
