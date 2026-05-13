@@ -80,7 +80,6 @@ def main():
     plt.title('Valor Promedio de las Tiradas')
     plt.xlabel('Número de Tiradas')
     plt.ylabel('Valor Promedio')
-    plt.ylabel('Promedio')
     plt.legend()
 
     plt.subplot(2, 2, 3)
@@ -125,7 +124,6 @@ def main():
     plt.title('Valor Promedio de las Tiradas')
     plt.xlabel('Número de Tiradas')
     plt.ylabel('Valor Promedio')
-    plt.ylabel('Frecuencia Relativa')
     plt.legend()
 
     plt.subplot(2, 2, 3)
