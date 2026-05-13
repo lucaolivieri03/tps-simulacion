@@ -99,10 +99,7 @@ def main():
     plt.ylabel('Valor del Desvío Estándar')
     plt.legend()
 
-    # Ajustar diseño y mostrar gráficos
     plt.tight_layout()
-
-    # Guardar la figura en disco
     plt.savefig('graficas.png')
 
     # ------------------MULTIPLES CORRIDAS----------------------------------
@@ -146,11 +143,38 @@ def main():
     plt.ylabel('Valor del Desvío Estándar')
     plt.legend()
 
-    # Ajustar diseño y mostrar gráficos
     plt.tight_layout()
-
-    # Guardar la figura en disco
     plt.savefig('graficasCorridas.png')
+
+    # ------------------ GRÁFICAS ADICIONALES (SOLO 1RA CORRIDA) ------------------
+    
+    plt.figure(figsize=(14, 6))
+
+    # 1. Gráfico de barras con la frecuencia absoluta de cada número (Primera corrida)
+    plt.subplot(1, 2, 1)
+    frecuencias_absolutas = np.bincount(corridas[0], minlength=37)
+    numeros = np.arange(37)
+    plt.bar(numeros, frecuencias_absolutas, color='skyblue', edgecolor='black', alpha=0.8)
+    plt.title('Frecuencia Absoluta de cada número\n(Primera Corrida)')
+    plt.xlabel('Número (0-36)')
+    plt.ylabel('Frecuencia Absoluta (Ocurrencias)')
+    plt.xticks(np.arange(0, 37, 2))
+
+    # 2. Promedio en función de su ocurrencia / Teorema Central del Límite (Gráfica continua)
+    plt.subplot(1, 2, 2)
+    promedios_finales = promedios_acum[:, -1]
+    plt.hist(promedios_finales, bins='auto', density=True, color='lightgreen', edgecolor='black', alpha=0.6, label='Frecuencia Empírica')
+    sigma_promedio = desvioEsperado / np.sqrt(n)
+    x_val = np.linspace(valorPromedioEsperado - 4*sigma_promedio, valorPromedioEsperado + 4*sigma_promedio, 100)
+    y_val = (1 / (np.sqrt(2 * np.pi) * sigma_promedio)) * np.exp(-0.5 * ((x_val - valorPromedioEsperado) / sigma_promedio)**2)
+    plt.plot(x_val, y_val, color='blue', linewidth=2, label='Distribución Normal (Teórica)')
+    plt.title('Teorema del Límite Central\n(Densidad de los promedios finales)')
+    plt.xlabel('Valor del Promedio')
+    plt.ylabel('Frecuencia (Densidad)')
+    plt.legend()
+
+    plt.tight_layout()
+    plt.savefig('graficasAdicionales.png')
 
     # Mostrar gráficos
     plt.show()
