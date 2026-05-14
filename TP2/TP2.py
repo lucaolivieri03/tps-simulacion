@@ -1,7 +1,6 @@
 
 import argparse
 import random
-import numpy as np
 import matplotlib.pyplot as plt
 
 class Apuesta:
@@ -34,6 +33,8 @@ class Apuesta:
         return False
 
     def _validar_paridad(self, numero):
+        if numero == 0:
+            return False
         if numero % 2 == 0 and self.valor == 'par':
             return True
         elif numero % 2 != 0 and self.valor == 'impar':
@@ -41,6 +42,8 @@ class Apuesta:
         return False
 
     def _validar_docena(self, numero):
+        if numero == 0:
+            return False
         if numero <= 12 and self.valor == 'primera':
             return True
         elif 12 < numero <= 24 and self.valor == 'segunda':
@@ -62,76 +65,129 @@ class Apuesta:
         return False
 
     def _validar_alto_bajo(self, numero):
+        if numero == 0:
+            return False
         if numero <= 18 and self.valor == 'bajo':
             return True
         elif numero > 18 and self.valor == 'alto':
             return True
         return False
 
-def estrategia_martingala(corridas, tiradas, capital_inicial):
+def estrategia_martingala(corridas, tiradas, capital_inicial, capital_infinito=False):
     resultados = []
     for _ in range(corridas):
         resultado_corrida = []
         capital = capital_inicial
         apuesta = 1
         for _ in range(tiradas):
-            jugada = Apuesta('paridad', 'par')  # Suponemos que siempre apostamos al par
+            jugada = Apuesta('paridad', 'par')
             numero_ganador = random.randint(0, 36)
             if jugada.validar_ganancia(numero_ganador):
                 capital += apuesta
+                apuesta = 1
+                resultado_corrida.append(capital)
             else:
                 capital -= apuesta
-                apuesta *= 2  # Duplicamos la apuesta después de perder
-                if capital_inicial != -1 and capital < apuesta:
+                apuesta *= 2
+                resultado_corrida.append(capital)
+                if not capital_infinito and capital < apuesta:
                     break
-            resultado_corrida.append(capital)
         resultados.append(resultado_corrida)
     return resultados
 
-def estrategia_dalembert(corridas, tiradas, capital_inicial):
+def estrategia_dalembert(corridas, tiradas, capital_inicial, capital_infinito=False):
     resultados = []
     for _ in range(corridas):
+        resultado_corrida = []
         capital = capital_inicial
         apuesta = 1
         for _ in range(tiradas):
-            resultado_corrida = []
-            jugada = Apuesta('paridad', 'par')  # Suponemos que siempre apostamos al par
+            jugada = Apuesta('paridad', 'par')
             numero_ganador = random.randint(0, 36)
             if jugada.validar_ganancia(numero_ganador):
                 capital += apuesta
-                apuesta = max(1, apuesta - 1)  # Reducimos la apuesta después de ganar, pero no menos de 1
+                apuesta = max(1, apuesta - 1)
+                resultado_corrida.append(capital)
             else:
                 capital -= apuesta
-                apuesta += 1  # Aumentamos la apuesta después de perder
-                if capital_inicial != -1 and capital < apuesta:
+                apuesta += 1
+                resultado_corrida.append(capital)
+                if not capital_infinito and capital < apuesta:
                     break
-            resultado_corrida.append(capital)
         resultados.append(resultado_corrida)
     return resultados
 
-def estrategia_fibonacci(corridas, tiradas, capital_inicial):
+def estrategia_fibonacci(corridas, tiradas, capital_inicial, capital_infinito=False):
     resultados = []
     for _ in range(corridas):
+        resultado_corrida = []
         capital = capital_inicial
-        secuencia_fibonacci = [1, 1]  # Comenzamos con los dos primeros números de Fibonacci
+        secuencia_fibonacci = [1, 1]
         apuesta_index = 0
         for _ in range(tiradas):
-            resultado_corrida = []
-            jugada = Apuesta('paridad', 'par')  # Suponemos que siempre apostamos al par
+            jugada = Apuesta('paridad', 'par')
             numero_ganador = random.randint(0, 36)
             if jugada.validar_ganancia(numero_ganador):
                 capital += secuencia_fibonacci[apuesta_index]
-                apuesta_index = max(0, apuesta_index - 2)  # Retrocedemos dos posiciones en la secuencia después de ganar
+                apuesta_index = max(0, apuesta_index - 2)
+                resultado_corrida.append(capital)
             else:
                 capital -= secuencia_fibonacci[apuesta_index]
-                apuesta_index += 1  # Avanzamos una posición en la secuencia después de perder
-                if apuesta_index >= len(secuencia_fibonacci):  # Si llegamos al final de la secuencia, agregamos el siguiente número
+                apuesta_index += 1
+                resultado_corrida.append(capital)
+                if apuesta_index >= len(secuencia_fibonacci):
                     secuencia_fibonacci.append(secuencia_fibonacci[-1] + secuencia_fibonacci[-2])
-                if capital_inicial != -1 and capital < secuencia_fibonacci[apuesta_index]:
+                if not capital_infinito and capital < secuencia_fibonacci[apuesta_index]:
                     break
-            resultado_corrida.append(capital)
+            
         resultados.append(resultado_corrida)
     return resultados
+
+def calcular_frec_rel(corrida, capital_inicial):
+    favorables = 0
+    frec_rel = []
+    for tirada in range(len(corrida)):
+        capital_prev = corrida[tirada - 1] if tirada > 0 else capital_inicial
+        if corrida[tirada] > capital_prev:
+            favorables += 1
+        frec_rel.append(favorables / (tirada + 1))
+    return frec_rel
+
+def analizar_frec_rel_tiradas_favorables(resultados, capital_inicial):
+    num_corridas = len(resultados)
+    width = 0.8 / num_corridas
+
+    plt.figure()
+    for i, corrida in enumerate(resultados):
+        frec_rel = calcular_frec_rel(corrida, capital_inicial)
+        x = range(1, len(frec_rel) + 1)
+        if num_corridas <= 5:
+            offset = [t + (i - num_corridas / 2) * width for t in x]
+            plt.bar(offset, frec_rel, width=width, label=f'Corrida {i + 1}', alpha=0.8)
+        else:
+            plt.plot(x, frec_rel, label=f'Corrida {i + 1}', alpha=0.7)
+
+    plt.axhline(y=18/37, color='r', linestyle='--', label='Prob. teórica (18/37)')
+    plt.xlabel('n (número de tiradas)')
+    plt.ylabel('fr (frecuencia relativa)')
+    plt.title('Frecuencia relativa de tiradas favorables')
+    plt.legend()
+    plt.show()
+
+def analizar_flujo_capital(resultados, capital_inicial):
+
+    plt.figure()
+    for i, corrida in enumerate(resultados):
+        corrida.insert(0, capital_inicial)
+        x = range(1, len(corrida) + 1)
+        plt.plot(x, corrida, label=f'Corrida {i + 1}', alpha=0.7)
+
+    plt.axhline(y=capital_inicial, color='r', linestyle='--', label='Capital inicial')
+    plt.xlabel('n (número de tiradas)')
+    plt.ylabel('Capital')
+    plt.title('Flujo de capital a lo largo de las tiradas')
+    plt.legend()
+    plt.show()
 
 def main():
     parser = argparse.ArgumentParser(description='Simulación de Ruleta UTN')
@@ -148,22 +204,25 @@ def main():
     s = args.estrategia
     a = args.capital
 
-    if a == 'i':
-        capital = -1  # Capital infinito
-    else:
-        capital = 100  # Capital inicial para estrategias con capital finito
+    capital = 100
+    capital_infinito = a == 'i'
 
     print(f"Iniciando {c} corridas de {n} tiradas cada una. Analizando la estrategia: {s} con capital: {a}")
 
     if s == 'm':
-        resultados = estrategia_martingala(c, n, capital)
+        resultados = estrategia_martingala(c, n, capital, capital_infinito)
     elif s == 'd':
-        resultados = estrategia_dalembert(c, n, capital)
+        resultados = estrategia_dalembert(c, n, capital, capital_infinito)
     elif s == 'f':
-        resultados = estrategia_fibonacci(c, n, capital)
+        resultados = estrategia_fibonacci(c, n, capital, capital_infinito)
     else:
         print("Estrategia no reconocida. Por favor, elija entre 'm', 'd', 'f' o 'o'.")
         return
 
+    analizar_frec_rel_tiradas_favorables(resultados, capital)
+    analizar_flujo_capital(resultados, capital)
+
 if __name__ == '__main__':
     main()
+
+
