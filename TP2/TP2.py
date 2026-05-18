@@ -143,6 +143,30 @@ def estrategia_fibonacci(corridas, tiradas, capital_inicial, capital_infinito=Fa
         resultados.append(resultado_corrida)
     return resultados
 
+def estrategia_jacobo(corridas, tiradas, capital_inicial, capital_infinito=False):
+    resultados = []
+    numeros_jacobo = list(range(22, 37)) + [0, 3, 4, 7, 9, 12, 15, 18]
+    apuestas = [Apuesta('numero', num) for num in numeros_jacobo]
+    costo_apuesta = len(apuestas)
+    for _ in range(corridas):
+        resultado_corrida = []
+        capital = capital_inicial
+        for _ in range(tiradas):
+            numero_ganador = random.randint(0, 36)
+            gano = any(apuesta.validar_ganancia(numero_ganador) for apuesta in apuestas)
+            if gano:
+                capital += 13
+                resultado_corrida.append(capital)
+            else:
+                capital -= costo_apuesta
+                resultado_corrida.append(capital)
+                
+                if not capital_infinito and capital < costo_apuesta:
+                    break
+
+        resultados.append(resultado_corrida)
+    return resultados
+
 def calcular_frec_rel(corrida, capital_inicial):
     favorables = 0
     frec_rel = []
@@ -215,6 +239,8 @@ def main():
         resultados = estrategia_dalembert(c, n, capital, capital_infinito)
     elif s == 'f':
         resultados = estrategia_fibonacci(c, n, capital, capital_infinito)
+    elif s == 'o':
+        resultados = estrategia_jacobo(c, n, capital, capital_infinito)
     else:
         print("Estrategia no reconocida. Por favor, elija entre 'm', 'd', 'f' o 'o'.")
         return
