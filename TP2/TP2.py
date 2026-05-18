@@ -1,4 +1,3 @@
-
 import argparse
 import random
 import matplotlib.pyplot as plt
@@ -139,7 +138,6 @@ def estrategia_fibonacci(corridas, tiradas, capital_inicial, capital_infinito=Fa
                     secuencia_fibonacci.append(secuencia_fibonacci[-1] + secuencia_fibonacci[-2])
                 if not capital_infinito and capital < secuencia_fibonacci[apuesta_index]:
                     break
-            
         resultados.append(resultado_corrida)
     return resultados
 
@@ -160,10 +158,8 @@ def estrategia_jacobo(corridas, tiradas, capital_inicial, capital_infinito=False
             else:
                 capital -= costo_apuesta
                 resultado_corrida.append(capital)
-                
                 if not capital_infinito and capital < costo_apuesta:
                     break
-
         resultados.append(resultado_corrida)
     return resultados
 
@@ -180,7 +176,6 @@ def calcular_frec_rel(corrida, capital_inicial):
 def analizar_frec_rel_tiradas_favorables(resultados, capital_inicial):
     num_corridas = len(resultados)
     width = 0.8 / num_corridas
-
     plt.figure()
     for i, corrida in enumerate(resultados):
         frec_rel = calcular_frec_rel(corrida, capital_inicial)
@@ -190,7 +185,6 @@ def analizar_frec_rel_tiradas_favorables(resultados, capital_inicial):
             plt.bar(offset, frec_rel, width=width, label=f'Corrida {i + 1}', alpha=0.8)
         else:
             plt.plot(x, frec_rel, label=f'Corrida {i + 1}', alpha=0.7)
-
     plt.axhline(y=18/37, color='r', linestyle='--', label='Prob. teórica (18/37)')
     plt.xlabel('n (número de tiradas)')
     plt.ylabel('fr (frecuencia relativa)')
@@ -198,41 +192,46 @@ def analizar_frec_rel_tiradas_favorables(resultados, capital_inicial):
     plt.legend()
     plt.show()
 
-def analizar_flujo_capital(resultados, capital_inicial):
-
+def analizar_flujo_capital(resultados, capital_inicial, num_tiradas):
     plt.figure()
-    for i, corrida in enumerate(resultados):
-        corrida.insert(0, capital_inicial)
-        x = range(1, len(corrida) + 1)
-        plt.plot(x, corrida, label=f'Corrida {i + 1}', alpha=0.7)
-
-    plt.axhline(y=capital_inicial, color='r', linestyle='--', label='Capital inicial')
+    resultados_completos = []
+    for corrida in resultados:
+        corrida_completa = [capital_inicial] + corrida
+        if len(corrida_completa) < num_tiradas + 1:
+            ultimo_valor = corrida_completa[-1]
+            faltantes = (num_tiradas + 1) - len(corrida_completa)
+            corrida_completa.extend([ultimo_valor] * faltantes)
+        resultados_completos.append(corrida_completa)
+    x = range(num_tiradas + 1)
+    max_individuales = min(10, len(resultados_completos))
+    for i in range(max_individuales):
+        etiqueta = f'Corrida individual' if i == 0 else ""
+        plt.plot(x, resultados_completos[i], alpha=0.3, color='gray', label=etiqueta)
+    promedios = [sum(tirada) / len(tirada) for tirada in zip(*resultados_completos)]
+    plt.plot(x, promedios, color='red', linewidth=2.5, label='Promedio General', zorder=5)
+    plt.axhline(y=capital_inicial, color='blue', linestyle='--', label='Capital inicial', zorder=4)
     plt.xlabel('n (número de tiradas)')
-    plt.ylabel('Capital')
-    plt.title('Flujo de capital a lo largo de las tiradas')
-    plt.legend()
+    plt.ylabel('Cantidad de Capital (cc)')
+    plt.title('Flujo de capital simulado vs Promedio')
+    handles, labels = plt.gca().get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    plt.legend(by_label.values(), by_label.keys())
     plt.show()
 
 def main():
     parser = argparse.ArgumentParser(description='Simulación de Ruleta UTN')
-
     parser.add_argument('-c', '--corridas', type=int, required=True, help='Cantidad de corridas (series de tiradas)')
     parser.add_argument('-n', '--tiradas', type=int, required=True, help='Cantidad de tiradas por cada corrida')
     parser.add_argument('-s', '--estrategia', type=str, required=True, help='Estrategia de apuesta (m - Martingala, d - DAlembert, f - Fibonacci, o - Otra)')
     parser.add_argument('-a', '--capital', type=str, required=True, help='Capital finito o infinito (i - infinito, f - finito)')
-
     args = parser.parse_args()
-
     c = args.corridas
     n = args.tiradas
     s = args.estrategia
     a = args.capital
-
     capital = 100
     capital_infinito = a == 'i'
-
     print(f"Iniciando {c} corridas de {n} tiradas cada una. Analizando la estrategia: {s} con capital: {a}")
-
     if s == 'm':
         resultados = estrategia_martingala(c, n, capital, capital_infinito)
     elif s == 'd':
@@ -244,11 +243,8 @@ def main():
     else:
         print("Estrategia no reconocida. Por favor, elija entre 'm', 'd', 'f' o 'o'.")
         return
-
     analizar_frec_rel_tiradas_favorables(resultados, capital)
-    analizar_flujo_capital(resultados, capital)
+    analizar_flujo_capital(resultados, capital, n)
 
 if __name__ == '__main__':
     main()
-
-
