@@ -218,6 +218,26 @@ def analizar_flujo_capital(resultados, capital_inicial, num_tiradas):
     plt.legend(by_label.values(), by_label.keys())
     plt.show()
 
+def analizar_flujo_todas_corridas(resultados, capital_inicial, num_tiradas):
+    plt.figure()
+    resultados_completos = []
+    for corrida in resultados:
+        corrida_completa = [capital_inicial] + corrida
+        if len(corrida_completa) < num_tiradas + 1:
+            ultimo_valor = corrida_completa[-1]
+            faltantes = (num_tiradas + 1) - len(corrida_completa)
+            corrida_completa.extend([ultimo_valor] * faltantes)
+        resultados_completos.append(corrida_completa)
+    x = range(num_tiradas + 1)
+    for i, corrida_completa in enumerate(resultados_completos):
+        plt.plot(x, corrida_completa, alpha=0.7)
+    plt.axhline(y=capital_inicial, color='black', linestyle='--', linewidth=2, label='Capital inicial')
+    plt.xlabel('n (número de tiradas)')
+    plt.ylabel('Cantidad de Capital (cc)')
+    plt.title('Flujo de capital - Todas las corridas individuales')
+    plt.legend()
+    plt.show()
+
 def main():
     parser = argparse.ArgumentParser(description='Simulación de Ruleta UTN')
     parser.add_argument('-c', '--corridas', type=int, required=True, help='Cantidad de corridas (series de tiradas)')
@@ -245,6 +265,7 @@ def main():
         return
     analizar_frec_rel_tiradas_favorables(resultados, capital)
     analizar_flujo_capital(resultados, capital, n)
+    analizar_flujo_todas_corridas(resultados, capital, n)
 
 if __name__ == '__main__':
     main()
