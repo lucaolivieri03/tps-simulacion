@@ -26,8 +26,7 @@ double avg_holding = holding_cost * area_holding / mesesTotales;
 double avg_shortage = shortage_cost * area_shortage / mesesTotales;
 double avg_total = avg_ordering + avg_holding + avg_shortage;
 
-traceln("--- RESULTADOS SIMULACION ---");
-traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
+costoTotalMensual = avg_total;]]></DestroyCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1782330740911</Id>
@@ -127,7 +126,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="PlainVariable">
 					<Id>1782331472794</Id>
 					<Name><![CDATA[inv_level]]></Name>
-					<X>240</X><Y>640</Y>
+					<X>1240</X><Y>40</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -142,7 +141,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="PlainVariable">
 					<Id>1782331488492</Id>
 					<Name><![CDATA[total_ordering_cost]]></Name>
-					<X>240</X><Y>690</Y>
+					<X>1240</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -157,7 +156,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="PlainVariable">
 					<Id>1782331520743</Id>
 					<Name><![CDATA[area_holding]]></Name>
-					<X>240</X><Y>740</Y>
+					<X>1240</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -172,7 +171,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="PlainVariable">
 					<Id>1782331531089</Id>
 					<Name><![CDATA[area_shortage]]></Name>
-					<X>240</X><Y>790</Y>
+					<X>1240</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -187,7 +186,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="PlainVariable">
 					<Id>1782331544388</Id>
 					<Name><![CDATA[time_last_event]]></Name>
-					<X>240</X><Y>840</Y>
+					<X>1240</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -199,10 +198,22 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1782398159522</Id>
+					<Name><![CDATA[costoTotalMensual]]></Name>
+					<X>1240</X><Y>380</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1782330959057</Id>
 					<Name><![CDATA[smalls]]></Name>
-					<X>40</X><Y>640</Y>
+					<X>1040</X><Y>40</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -226,7 +237,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="Parameter">
 					<Id>1782331053479</Id>
 					<Name><![CDATA[bigs]]></Name>
-					<X>40</X><Y>690</Y>
+					<X>1040</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -250,7 +261,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="Parameter">
 					<Id>1782331073186</Id>
 					<Name><![CDATA[initial_inv_level]]></Name>
-					<X>40</X><Y>740</Y>
+					<X>1040</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -274,7 +285,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="Parameter">
 					<Id>1782331116946</Id>
 					<Name><![CDATA[mean_interdemand]]></Name>
-					<X>40</X><Y>790</Y>
+					<X>1040</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -298,7 +309,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="Parameter">
 					<Id>1782331129777</Id>
 					<Name><![CDATA[setup_cost]]></Name>
-					<X>40</X><Y>840</Y>
+					<X>1040</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -322,7 +333,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="Parameter">
 					<Id>1782331152924</Id>
 					<Name><![CDATA[incremental_cost]]></Name>
-					<X>40</X><Y>890</Y>
+					<X>1040</X><Y>290</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -346,7 +357,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="Parameter">
 					<Id>1782331176916</Id>
 					<Name><![CDATA[holding_cost]]></Name>
-					<X>40</X><Y>940</Y>
+					<X>1040</X><Y>340</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -370,7 +381,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Variable Class="Parameter">
 					<Id>1782331202532</Id>
 					<Name><![CDATA[shortage_cost]]></Name>
-					<X>40</X><Y>990</Y>
+					<X>1040</X><Y>380</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -396,7 +407,7 @@ traceln("Costo Total Promedio: $" + avg_total);]]></DestroyCode>
 				<Event>
 					<Id>1782331997047</Id>
 					<Name><![CDATA[eventoDemanda]]></Name>
-					<X>490</X><Y>640</Y>
+					<X>1490</X><Y>40</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -429,7 +440,7 @@ inv_level -= distribucionDemanda();]]></Action>
 				<Event>
 					<Id>1782332075410</Id>
 					<Name><![CDATA[eventoEvaluacion]]></Name>
-					<X>490</X><Y>690</Y>
+					<X>1490</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -470,7 +481,7 @@ if (inv_level < smalls) {
 				<DynamicEventClass>
 					<Id>1782332104645</Id>
 					<Name><![CDATA[llegadaPedido]]></Name>
-					<X>490</X><Y>740</Y>
+					<X>1490</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -489,7 +500,7 @@ inv_level += amount;]]></Action>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1782331873764</Id>
 					<Name><![CDATA[actualizarEstadisticas]]></Name>
-					<X>240</X><Y>940</Y>
+					<X>1240</X><Y>340</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -508,7 +519,7 @@ if (inv_level < 0) {
 				<CustomDistribution>
 					<Id>1782331582778</Id>
 					<Name><![CDATA[distribucionDemanda]]></Name>
-					<X>240</X><Y>890</Y>
+					<X>1240</X><Y>290</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1097,7 +1108,196 @@ if (inv_level < 0) {
 				<FinalTime><![CDATA[120.01]]></FinalTime>
 			</ModelTimeProperties>
 			<BypassInitialScreen>true</BypassInitialScreen>
-		</SimulationExperiment>	
+		</SimulationExperiment>
+		<!--   =========  Parameter Variation Experiment   ========  -->
+		<ParamVariationExperiment ActiveObjectClassId="1782330740906">
+			<Id>1782399463011</Id>
+			<Name><![CDATA[ExpPoliticas]]></Name>
+			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
+			<MaximumMemory>512</MaximumMemory>
+			<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
+			<CustomGeneratorCode>new Random()</CustomGeneratorCode>
+			<AfterSimulationRunCode><![CDATA[if (root != null) {
+    root.actualizarEstadisticas();
+    
+    double mesesTotales = root.time();
+    double ord = root.total_ordering_cost / mesesTotales;
+    double hold = root.holding_cost * root.area_holding / mesesTotales;
+    double shortg = root.shortage_cost * root.area_shortage / mesesTotales;
+    
+    sumaOrd += ord;
+    sumaHold += hold;
+    sumaShort += shortg;
+    sumaCostosIteracion += (ord + hold + shortg);
+}]]></AfterSimulationRunCode>
+			<SeedValue>1</SeedValue>
+			<SelectionModeForSimultaneousEvents>LIFO</SelectionModeForSimultaneousEvents>
+			<VmArgs><![CDATA[]]></VmArgs>
+			<LoadRootFromSnapshot>false</LoadRootFromSnapshot>
+			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1782399481204</Id>
+					<Name><![CDATA[sumaCostosIteracion]]></Name>
+					<X>50</X><Y>50</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1782400335920</Id>
+					<Name><![CDATA[sumaOrd]]></Name>
+					<X>50</X><Y>100</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1782400348686</Id>
+					<Name><![CDATA[sumaHold]]></Name>
+					<X>50</X><Y>150</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1782400357403</Id>
+					<Name><![CDATA[sumaShort]]></Name>
+					<X>50</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+			</Variables>
+
+
+			<AfterIterationCode><![CDATA[double pOrd = sumaOrd / 30.0;
+double pHold = sumaHold / 30.0;
+double pShort = sumaShort / 30.0;
+double pTotal = sumaCostosIteracion / 30.0;
+
+traceln("Pol. (" + smalls + ", " + bigs + ") | Ord: $" + String.format("%.2f", pOrd) + 
+        " | Mant: $" + String.format("%.2f", pHold) + 
+        " | Falt: $" + String.format("%.2f", pShort) + 
+        " --> TOTAL: $" + String.format("%.2f", pTotal));
+
+sumaOrd = 0.0; sumaHold = 0.0; sumaShort = 0.0; sumaCostosIteracion = 0.0;]]></AfterIterationCode>
+			<AllowParallelEvaluations>false</AllowParallelEvaluations>
+			<UseFreeformParameters>true</UseFreeformParameters>
+			<NumberOfRuns>9</NumberOfRuns>
+			<FreeformParamValue>	
+				<Id>1782330959057</Id>
+				<Expression Class="CodeValue">
+					<Code><![CDATA[new int[]{20, 20, 20, 20, 40, 40, 40, 60, 60}[index]]]></Code>
+				</Expression>
+			</FreeformParamValue>
+			<FreeformParamValue>	
+				<Id>1782331053479</Id>
+				<Expression Class="CodeValue">
+					<Code><![CDATA[new int[]{40, 60, 80, 100, 60, 80, 100, 80, 100}[index]]]></Code>
+				</Expression>
+			</FreeformParamValue>
+			<FreeformParamValue>	
+				<Id>1782331073186</Id>
+			</FreeformParamValue>
+			<FreeformParamValue>	
+				<Id>1782331116946</Id>
+			</FreeformParamValue>
+			<FreeformParamValue>	
+				<Id>1782331129777</Id>
+			</FreeformParamValue>
+			<FreeformParamValue>	
+				<Id>1782331152924</Id>
+			</FreeformParamValue>
+			<FreeformParamValue>	
+				<Id>1782331176916</Id>
+			</FreeformParamValue>
+			<FreeformParamValue>	
+				<Id>1782331202532</Id>
+			</FreeformParamValue>
+			<RangeVariationParamValue>	
+				<Id>1782330959057</Id>
+				<Type>RANGE</Type>
+			</RangeVariationParamValue>
+			<RangeVariationParamValue>	
+				<Id>1782331053479</Id>
+				<Type>RANGE</Type>
+			</RangeVariationParamValue>
+			<RangeVariationParamValue>	
+				<Id>1782331073186</Id>
+				<Type>FIXED</Type>
+			</RangeVariationParamValue>
+			<RangeVariationParamValue>	
+				<Id>1782331116946</Id>
+				<Type>FIXED</Type>
+			</RangeVariationParamValue>
+			<RangeVariationParamValue>	
+				<Id>1782331129777</Id>
+				<Type>FIXED</Type>
+			</RangeVariationParamValue>
+			<RangeVariationParamValue>	
+				<Id>1782331152924</Id>
+				<Type>FIXED</Type>
+			</RangeVariationParamValue>
+			<RangeVariationParamValue>	
+				<Id>1782331176916</Id>
+				<Type>FIXED</Type>
+			</RangeVariationParamValue>
+			<RangeVariationParamValue>	
+				<Id>1782331202532</Id>
+				<Type>FIXED</Type>
+			</RangeVariationParamValue>
+			<ModelTimeProperties>
+				<StopOption><![CDATA[Stop at specified time]]></StopOption>
+				<InitialDate><![CDATA[1782259200000]]></InitialDate>	
+				<InitialTime><![CDATA[0.0]]></InitialTime>	
+				<FinalDate><![CDATA[2093325120000]]></FinalDate>	
+				<FinalTime><![CDATA[120.01]]></FinalTime>	
+			</ModelTimeProperties>
+			<PresentationProperties>
+				<EnableZoomAndPanning>true</EnableZoomAndPanning>
+				<Title><![CDATA[Inventario : ExpPoliticas]]></Title>
+				<EnableDeveloperPanel>true</EnableDeveloperPanel>
+				<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
+			</PresentationProperties>
+			<ReplicationsProperties>
+				<UseReplication>true</UseReplication>
+				<FixedReplicationsNumber>true</FixedReplicationsNumber>
+				<ReplicationPerIteration>30</ReplicationPerIteration>
+				<MinimumReplication>2</MinimumReplication>
+				<MaximumReplication>10</MaximumReplication>
+				<ConfidenceLevel>LEVEL_80</ConfidenceLevel>
+				<ErrorPercent>0.5</ErrorPercent>
+				<ExpressionForConfidenceComputation><![CDATA[0]]></ExpressionForConfidenceComputation>
+			</ReplicationsProperties>
+		</ParamVariationExperiment>	
 	</Experiments>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.modules.markup_descriptors]]></LibraryName>
