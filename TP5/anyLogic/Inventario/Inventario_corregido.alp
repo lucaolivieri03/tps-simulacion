@@ -7,7 +7,7 @@
 <AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.9.9.202606170507" AlpVersion="8.9.9">
 <Model>
 	<Id>1782330740902</Id>
-	<Name><![CDATA[Inventario]]></Name>
+	<Name><![CDATA[Inventario_corregido]]></Name>
 	<EngineVersion>6</EngineVersion>
 	<JavaPackageName><![CDATA[inventario]]></JavaPackageName>
 	<ModelTimeUnit><![CDATA[Month]]></ModelTimeUnit>
@@ -26,6 +26,9 @@ double avg_holding = holding_cost * area_holding / mesesTotales;
 double avg_shortage = shortage_cost * area_shortage / mesesTotales;
 double avg_total = avg_ordering + avg_holding + avg_shortage;
 
+costoOrdenMensual = avg_ordering;
+costoMantenimientoMensual = avg_holding;
+costoFaltanteMensual = avg_shortage;
 costoTotalMensual = avg_total;]]></DestroyCode>
 			<Generic>false</Generic>
 			<GenericParameter>
@@ -208,6 +211,54 @@ costoTotalMensual = avg_total;]]></DestroyCode>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1782398159523</Id>
+					<Name><![CDATA[costoOrdenMensual]]></Name>
+					<X>1240</X><Y>420</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1782398159524</Id>
+					<Name><![CDATA[costoMantenimientoMensual]]></Name>
+					<X>1240</X><Y>460</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1782398159525</Id>
+					<Name><![CDATA[costoFaltanteMensual]]></Name>
+					<X>1240</X><Y>500</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.0]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -497,7 +548,7 @@ inv_level += amount;]]></Action>
 			<Functions>
 				<Function AccessType="default" StaticFunction="false">
 					<ReturnModificator>VOID</ReturnModificator>
-					<ReturnType><![CDATA[double]]></ReturnType>
+					<ReturnType><![CDATA[void]]></ReturnType>
 					<Id>1782331873764</Id>
 					<Name><![CDATA[actualizarEstadisticas]]></Name>
 					<X>1240</X><Y>340</Y>
@@ -895,9 +946,109 @@ if (inv_level < 0) {
 					<DatasetExpression>  
 						<Title><![CDATA[Nivel de Inventario]]></Title>
 					<Id>1782334142835</Id>
-					<Expression><![CDATA[dataset]]></Expression>
+					<Expression><![CDATA[time()]]></Expression>
 					<Color>-23296</Color>
 					<Expression2><![CDATA[inv_level]]></Expression2>
+					<Expression2Flag>true</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>120</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[120]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1782334139905</Id>
+					<Name><![CDATA[plotCostos]]></Name>
+					<X>260</X><Y>510</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1782334139903</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1782374400000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>580</Width>
+					<Height>400</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>500</Width>
+						<Height>310</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Costo Orden / mes]]></Title>
+					<Id>1782334142836</Id>
+					<Expression><![CDATA[time()]]></Expression>
+					<Color>-16776961</Color>
+					<Expression2><![CDATA[time() > 0 ? total_ordering_cost / time() : 0]]></Expression2>
+					<Expression2Flag>true</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[Costo Mantenimiento / mes]]></Title>
+					<Id>1782334142837</Id>
+					<Expression><![CDATA[time()]]></Expression>
+					<Color>-16744448</Color>
+					<Expression2><![CDATA[time() > 0 ? (holding_cost * area_holding) / time() : 0]]></Expression2>
+					<Expression2Flag>true</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[Costo Faltante / mes]]></Title>
+					<Id>1782334142838</Id>
+					<Expression><![CDATA[time()]]></Expression>
+					<Color>-3308225</Color>
+					<Expression2><![CDATA[time() > 0 ? (shortage_cost * area_shortage) / time() : 0]]></Expression2>
+					<Expression2Flag>true</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[Costo Total / mes]]></Title>
+					<Id>1782334142839</Id>
+					<Expression><![CDATA[time()]]></Expression>
+					<Color>-65536</Color>
+					<Expression2><![CDATA[time() > 0 ? (total_ordering_cost + holding_cost * area_holding + shortage_cost * area_shortage) / time() : 0]]></Expression2>
 					<Expression2Flag>true</Expression2Flag>
 						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
@@ -974,6 +1125,220 @@ if (inv_level < 0) {
 					</Font>
 					<Alignment>CENTER</Alignment>
 				</Text>
+				<Text>
+					<Id>1782334887730</Id>
+					<Name><![CDATA[textKPITitulo]]></Name>
+					<X>20</X><Y>470</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12566464</Color>
+					<Text><![CDATA[Costos promedio por mes (acumulado a la fecha)]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>13</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782334887731</Id>
+					<Name><![CDATA[textKPIOrdenLbl]]></Name>
+					<X>20</X><Y>500</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12171190</Color>
+					<Text><![CDATA[Orden:]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>12</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782334887732</Id>
+					<Name><![CDATA[textKPIOrdenVal]]></Name>
+					<X>150</X><Y>500</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12042869</Color>
+					<Text><![CDATA[?]]></Text>
+					<TextCode><![CDATA["$" + String.format("%.2f", time() > 0 ? total_ordering_cost / time() : 0)]]></TextCode>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>12</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782334887733</Id>
+					<Name><![CDATA[textKPIMantLbl]]></Name>
+					<X>20</X><Y>520</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12171190</Color>
+					<Text><![CDATA[Mantenimiento:]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>12</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782334887734</Id>
+					<Name><![CDATA[textKPIMantVal]]></Name>
+					<X>150</X><Y>520</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12042869</Color>
+					<Text><![CDATA[?]]></Text>
+					<TextCode><![CDATA["$" + String.format("%.2f", time() > 0 ? (holding_cost * area_holding) / time() : 0)]]></TextCode>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>12</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782334887735</Id>
+					<Name><![CDATA[textKPIFaltLbl]]></Name>
+					<X>20</X><Y>540</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12171190</Color>
+					<Text><![CDATA[Faltante:]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>12</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782334887736</Id>
+					<Name><![CDATA[textKPIFaltVal]]></Name>
+					<X>150</X><Y>540</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12042869</Color>
+					<Text><![CDATA[?]]></Text>
+					<TextCode><![CDATA["$" + String.format("%.2f", time() > 0 ? (shortage_cost * area_shortage) / time() : 0)]]></TextCode>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>12</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782334887737</Id>
+					<Name><![CDATA[textKPITotalLbl]]></Name>
+					<X>20</X><Y>565</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-65536</Color>
+					<Text><![CDATA[TOTAL:]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>13</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782334887738</Id>
+					<Name><![CDATA[textKPITotalVal]]></Name>
+					<X>150</X><Y>565</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-65536</Color>
+					<Text><![CDATA[?]]></Text>
+					<TextCode><![CDATA["$" + String.format("%.2f", time() > 0 ? (total_ordering_cost + holding_cost * area_holding + shortage_cost * area_shortage) / time() : 0)]]></TextCode>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>13</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782417480512</Id>
+					<Name><![CDATA[textKPITitulo1]]></Name>
+					<X>20</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12566464</Color>
+					<Text><![CDATA[Inventario]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>13</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
 			</Presentation>
 
 				</Level>
@@ -991,7 +1356,7 @@ if (inv_level < 0) {
 	<Frame>
 		<Id>1782330740904</Id>
 		<Width>1000</Width>
-		<Height>600</Height>
+		<Height>950</Height>
 	</Frame>
 	<Database>
 		<Id>1782330740903</Id>
@@ -1138,7 +1503,7 @@ if (inv_level < 0) {
 				<Variable Class="PlainVariable">
 					<Id>1782399481204</Id>
 					<Name><![CDATA[sumaCostosIteracion]]></Name>
-					<X>50</X><Y>50</Y>
+					<X>60</X><Y>120</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1153,7 +1518,7 @@ if (inv_level < 0) {
 				<Variable Class="PlainVariable">
 					<Id>1782400335920</Id>
 					<Name><![CDATA[sumaOrd]]></Name>
-					<X>50</X><Y>100</Y>
+					<X>60</X><Y>170</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1168,7 +1533,7 @@ if (inv_level < 0) {
 				<Variable Class="PlainVariable">
 					<Id>1782400348686</Id>
 					<Name><![CDATA[sumaHold]]></Name>
-					<X>50</X><Y>150</Y>
+					<X>60</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1183,7 +1548,7 @@ if (inv_level < 0) {
 				<Variable Class="PlainVariable">
 					<Id>1782400357403</Id>
 					<Name><![CDATA[sumaShort]]></Name>
-					<X>50</X><Y>200</Y>
+					<X>60</X><Y>270</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1195,8 +1560,169 @@ if (inv_level < 0) {
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1782420000020</Id>
+					<Name><![CDATA[contadorPolitica]]></Name>
+					<X>60</X><Y>320</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 			</Variables>
+			<AnalysisData>
+    			<DataSet>
+					<Id>1782420000001</Id>
+					<Name><![CDATA[dsPolOrden]]></Name>
+					<X>60</X><Y>370</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1782420000002</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1782460800000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>100</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1782420000003</Id>
+					<Name><![CDATA[dsPolMant]]></Name>
+					<X>60</X><Y>420</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1782420000004</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1782460800000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>100</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1782420000005</Id>
+					<Name><![CDATA[dsPolFalt]]></Name>
+					<X>60</X><Y>470</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1782420000006</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1782460800000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>100</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1782420000007</Id>
+					<Name><![CDATA[dsPolTotal]]></Name>
+					<X>60</X><Y>520</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1782420000008</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1782460800000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MONTH]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>100</SamplesToKeep>
+				</DataSet>
+			</AnalysisData>
 
+			<Presentation>
+				<Text>
+					<Id>1782420000010</Id>
+					<Name><![CDATA[textTituloPlot]]></Name>
+					<X>50</X><Y>30</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12490271</Color>
+					<Text><![CDATA[Comparacion de politicas (s,S) - 30 replicas c/u]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>18</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1782420000011</Id>
+					<Name><![CDATA[textLeyendaEjeX]]></Name>
+					<X>50</X><Y>70</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12566464</Color>
+					<Text><![CDATA[Eje X = N de politica: 1=(20,40) 2=(20,60) 3=(20,80) 4=(20,100) 5=(40,60) 6=(40,80) 7=(40,100) 8=(60,80) 9=(60,100)]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>11</Size>
+						<Style>2</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+			</Presentation>
 
 			<AfterIterationCode><![CDATA[double pOrd = sumaOrd / 30.0;
 double pHold = sumaHold / 30.0;
@@ -1207,6 +1733,12 @@ traceln("Pol. (" + smalls + ", " + bigs + ") | Ord: $" + String.format("%.2f", p
         " | Mant: $" + String.format("%.2f", pHold) + 
         " | Falt: $" + String.format("%.2f", pShort) + 
         " --> TOTAL: $" + String.format("%.2f", pTotal));
+
+contadorPolitica += 1;
+dsPolOrden.add(contadorPolitica, pOrd);
+dsPolMant.add(contadorPolitica, pHold);
+dsPolFalt.add(contadorPolitica, pShort);
+dsPolTotal.add(contadorPolitica, pTotal);
 
 sumaOrd = 0.0; sumaHold = 0.0; sumaShort = 0.0; sumaCostosIteracion = 0.0;]]></AfterIterationCode>
 			<AllowParallelEvaluations>false</AllowParallelEvaluations>
@@ -1304,7 +1836,7 @@ sumaOrd = 0.0; sumaHold = 0.0; sumaShort = 0.0; sumaCostosIteracion = 0.0;]]></A
 			<Name><![CDATA[CompareRuns]]></Name>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
 			<MaximumMemory>512</MaximumMemory>
-			<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
+			<RandomNumberGenerationType>randomSeed</RandomNumberGenerationType>
 			<CustomGeneratorCode>new Random()</CustomGeneratorCode>
 			<AfterSimulationRunCode><![CDATA[if (root != null) {
     root.actualizarEstadisticas();
@@ -1321,8 +1853,6 @@ sumaOrd = 0.0; sumaHold = 0.0; sumaShort = 0.0; sumaCostosIteracion = 0.0;]]></A
     dsOrden.add(numCorrida, ord);
     dsMant.add(numCorrida, hold);
     dsFaltante.add(numCorrida, shortg);
-    
-    plot.updateData();
 }]]></AfterSimulationRunCode>
 			<SeedValue>1</SeedValue>
 			<SelectionModeForSimultaneousEvents>LIFO</SelectionModeForSimultaneousEvents>
@@ -1520,7 +2050,7 @@ sumaOrd = 0.0; sumaHold = 0.0; sumaShort = 0.0; sumaCostosIteracion = 0.0;]]></A
 					<Rotation>0.0</Rotation>
 					<Color>-12042869</Color>
 					<Text><![CDATA[?]]></Text>
-					<TextCode><![CDATA[format( getEngine().getRunCount() )]]></TextCode>
+					<TextCode><![CDATA[format( getEngine().getRunCount() ) + " / 30 minimas"]]></TextCode>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>12</Size>
@@ -1705,10 +2235,10 @@ sumaOrd = 0.0; sumaHold = 0.0; sumaShort = 0.0; sumaCostosIteracion = 0.0;]]></A
 						<Link>bigs</Link>
 					</ExtendedProperties>
 				</Control>
-    			<Plot>
-					<Id>1782413955887</Id>
-					<Name><![CDATA[plot]]></Name>
-					<X>300</X><Y>100</Y>
+    			<BarChart>
+					<Id>1782417882129</Id>
+					<Name><![CDATA[chart]]></Name>
+					<X>320</X><Y>100</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1716,7 +2246,7 @@ sumaOrd = 0.0; sumaHold = 0.0; sumaShort = 0.0; sumaCostosIteracion = 0.0;]]></A
 					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
 					<AutoUpdate>true</AutoUpdate>
 					<RecurrenceProperties>
-						<Id>1782413955885</Id>
+						<Id>1782417882127</Id>
 						<OccurrenceAtTime>true</OccurrenceAtTime>
 						<OccurrenceDate>1782460800000</OccurrenceDate>
 						<OccurrenceTime Class="CodeUnitValue">
@@ -1729,15 +2259,15 @@ sumaOrd = 0.0; sumaHold = 0.0; sumaShort = 0.0; sumaCostosIteracion = 0.0;]]></A
 						</RecurrenceCode>
 					</RecurrenceProperties>
 					<EmbeddedIcon>false</EmbeddedIcon>
-					<Width>670</Width>
-					<Height>470</Height>
+					<Width>650</Width>
+					<Height>320</Height>
 					<BackgroundColor/>
 					<BorderColor/>
 					<ChartArea>
 						<XOffset>50</XOffset>
 						<YOffset>30</YOffset>
-						<Width>590</Width>
-						<Height>380</Height>
+						<Width>570</Width>
+						<Height>230</Height>
 						<BackgroundColor>-1</BackgroundColor>
 						<BorderColor>-16777216</BorderColor>
 						<GridColor>-12566464</GridColor>
@@ -1753,60 +2283,32 @@ sumaOrd = 0.0; sumaHold = 0.0; sumaShort = 0.0; sumaCostosIteracion = 0.0;]]></A
 						<TextColor>-12566464</TextColor>
 					</Labels>
 					<ShowLegend>true</ShowLegend>
-					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
-					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
-					<VerScaleType>AUTO</VerScaleType>
-					<DrawLine>true</DrawLine>
-					<Interpolation>LINEAR</Interpolation>
-					<DatasetExpression>  
-						<Title><![CDATA[Total]]></Title>
-					<Id>1782413956395</Id>
-					<Expression><![CDATA[dsTotal]]></Expression>
-					<Color>-65536</Color>
-					<Expression2><![CDATA[0]]></Expression2>
-					<Expression2Flag>false</Expression2Flag>
-						<PointStyle>CIRCLE</PointStyle>
-						<LineWidth>1.0</LineWidth>
-						<HorizontalAxisExpression><![CDATA[0]]></HorizontalAxisExpression>
-					</DatasetExpression>
-					<DatasetExpression>  
+					<DataItem>
+					<Id>1782417942346</Id>
+					<Expression><![CDATA[dsOrden.size() > 0 ? dsOrden.getY(dsOrden.size() - 1) : 0]]></Expression>
+					<Color>-6632142</Color>
 						<Title><![CDATA[Orden]]></Title>
-					<Id>1782414040844</Id>
-					<Expression><![CDATA[dsOrden]]></Expression>
-					<Color>-16776961</Color>
-					<Expression2><![CDATA[0]]></Expression2>
-					<Expression2Flag>false</Expression2Flag>
-						<PointStyle>CIRCLE</PointStyle>
-						<LineWidth>1.0</LineWidth>
-						<HorizontalAxisExpression><![CDATA[0]]></HorizontalAxisExpression>
-					</DatasetExpression>
-					<DatasetExpression>  
-						<Title><![CDATA[Mant]]></Title>
-					<Id>1782414055458</Id>
-					<Expression><![CDATA[dsMant]]></Expression>
-					<Color>-16744448</Color>
-					<Expression2><![CDATA[0]]></Expression2>
-					<Expression2Flag>false</Expression2Flag>
-						<PointStyle>CIRCLE</PointStyle>
-						<LineWidth>1.0</LineWidth>
-						<HorizontalAxisExpression><![CDATA[0]]></HorizontalAxisExpression>
-					</DatasetExpression>
-					<DatasetExpression>  
+					</DataItem>
+					<DataItem>
+					<Id>1782417943209</Id>
+					<Expression><![CDATA[dsMant.size() > 0 ? dsMant.getY(dsMant.size() - 1) : 0]]></Expression>
+					<Color>-14774017</Color>
+						<Title><![CDATA[Mantenimiento]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1782417944046</Id>
+					<Expression><![CDATA[dsFaltante.size() > 0 ? dsFaltante.getY(dsFaltante.size() - 1) : 0]]></Expression>
+					<Color>-3137392</Color>
 						<Title><![CDATA[Faltante]]></Title>
-					<Id>1782414071031</Id>
-					<Expression><![CDATA[dsFaltante]]></Expression>
-					<Color>-3308225</Color>
-					<Expression2><![CDATA[0]]></Expression2>
-					<Expression2Flag>false</Expression2Flag>
-						<PointStyle>CIRCLE</PointStyle>
-						<LineWidth>1.0</LineWidth>
-						<HorizontalAxisExpression><![CDATA[0]]></HorizontalAxisExpression>
-					</DatasetExpression>
-					<SamplesToKeep>100</SamplesToKeep>
-					<HorScaleFromExpression><![CDATA[0]]></HorScaleFromExpression>
-					<HorScaleToExpression><![CDATA[1]]></HorScaleToExpression>
-					<HorScaleType>AUTO</HorScaleType>
-    			</Plot>
+					</DataItem>
+					<ScaleFromExpression><![CDATA[0]]></ScaleFromExpression>
+					<ScaleToExpression><![CDATA[1]]></ScaleToExpression>
+					<ScaleType>AUTO</ScaleType>
+					<Bars>
+						<Direction>UP</Direction>
+						<RelativeWidth>0.8</RelativeWidth>
+					</Bars>
+    			</BarChart>
 			</Presentation>
 
 			<Parameters>			
