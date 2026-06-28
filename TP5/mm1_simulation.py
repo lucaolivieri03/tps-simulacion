@@ -469,14 +469,19 @@ def plot_queue_dist(last_run: dict, lam: float, mu: float,
     max_n  = min(max(hist.keys()), 25)
     n_vals = list(range(max_n + 1))
     sim_p  = [hist.get(n, 0) / total_t for n in n_vals]
-    th_p   = [(1 - rho) * rho**n if rho < 1 else 0 for n in n_vals]
+    # P(Nq = 0) = P(N=0) + P(N=1) = (1-ρ) + (1-ρ)ρ = (1-ρ)(1+ρ)
+    # P(Nq = n) = P(N = n+1) = (1-ρ)·ρ^(n+1)  para n ≥ 1
+    if rho < 1:
+        th_p = [(1 - rho) * (1 + rho)] + [(1 - rho) * rho**(n + 1) for n in range(1, max_n + 1)]
+    else:
+        th_p = [0] * len(n_vals)
 
     x      = np.array(n_vals)
     width  = 0.35
 
     fig, ax = plt.subplots(figsize=(12, 5), facecolor=PALETTE["bg"])
     ax.bar(x - width/2, sim_p, width, color=PALETTE["sim"],   alpha=0.85, label="Simulado P(Q=n)")
-    ax.bar(x + width/2, th_p,  width, color=PALETTE["theory"],alpha=0.70, label="Teórico P(n)=(1−ρ)ρⁿ")
+    ax.bar(x + width/2, th_p,  width, color=PALETTE["theory"],alpha=0.70, label="Teórico P(Nq=n): (1−ρ)(1+ρ) / (1−ρ)ρⁿ⁺¹")
     _style_ax(ax,
               f"Distribución del número de clientes en cola  (ρ={rho:.2f})",
               "n = clientes en cola", "Probabilidad")
